@@ -1,0 +1,187 @@
+html{
+    -webkit-user-select:none;
+}
+body{
+    overflow-x:hidden;
+    background: url("../images/mainBg.jpg") no-repeat top;
+    background-size: cover;
+    -webkit-background-size: cover;
+}
+
+/* 中奖榜单 */
+.list{
+    margin: 0 15px;
+    border-top: 5px solid #4e08a6;
+    border-top-left-radius: 2px;
+    -webkit-border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    -webkit-border-top-right-radius: 2px;
+}
+.listContain{
+    margin: 0 5px;
+    padding: 10px 5px;
+    background-color: rgba(83,20,150,0.8);
+    border-bottom-left-radius: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    border-bottom-right-radius:5px;
+    -webkit-border-bottom-right-radius:5px;
+}
+.title{
+    display: flex;
+    -webkit-display: flex;
+    padding: 0 5px 5px 5px;
+}
+.titleItem{
+    flex: 2;
+    -webkit-flex: 2;
+    color:#fab60b;
+	text-align: left;
+}
+.titleText{
+    text-align: left;
+}
+.totalCount{
+    text-align: right;
+    font-size: 13px;
+}
+.listBox{
+    height:140px;
+    overflow: hidden;
+    position: relative;
+}
+.list ul{
+    -webkit-animation:6s move linear infinite;
+    position:absolute;
+    left:0;
+    width: 100%;
+    height:200%;
+}
+.list ul li{
+    padding: 5px;
+    overflow: hidden;
+    padding-left: 60px;
+    position: relative;
+	transition:all 0.5s;
+}
+.list ul li:nth-child(even){
+    background-color: rgba(101,44,161,0.8);
+}
+.list ul li:nth-child(odd){
+    background-color: rgba(92,32,156,0.9);
+}
+.userImage{
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    left: 6px;
+    top:11px;
+}
+.userInfo{
+    width: 100%;
+    min-width: 178px;
+    float: left;
+}
+.item{
+    min-height: 20px;
+    text-align: left;
+    font-size: 12px;
+    color:#fff;
+}
+.item-row{
+    padding: 0 10px;
+	height:20px;
+}
+.userName, .userPhone{
+    flex: 2;
+	-webkit-flex:2;
+	overflow:hidden;
+}
+.userName{
+	display:flex;
+	-webkit-display:flex;
+}
+.userName span{
+	flex:2;
+	-webkit-flex:2;
+	display:block;
+	max-width:8em;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+}
+.userPhone{
+    text-align: right;
+}
+@-webkit-keyframes move
+{
+    0%{
+        top:0px;
+    }
+    100%
+    {
+        top:-560px;
+    }
+}
+
+/* 活动规则 */
+.rulesContain{
+    margin: 0 20px;
+    padding: 10px 5px;
+    border: 1px dashed #4c0b89;
+}
+.box{ }
+.rulesList li{
+    text-align: left;
+    font-size: 12px;
+    padding:5px 10px;
+    color:#fff;
+}
+
+/* 抽奖结果 */
+.alertView{
+    background-color: rgba(0,0,0,0.5);
+    position:fixed;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+}
+.alertBox{
+    width: 300px;
+    height:300px;
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin-left:-150px;
+    margin-top:-150px;
+}
+.win{
+    background: url("../images/win.png") no-repeat center;
+    background-size: contain;
+    -webkit-background-size: contain;
+}
+.unwin{
+    background: url("../images/unwin.png") no-repeat center;
+    background-size: contain;
+    -webkit-background-size: contain;
+}
+.msg{
+    width:  100px;
+    height: 30px;
+    position:absolute;
+    bottom:65px;
+    left: 120px;
+    text-align:center;
+    color:#fff;
+    font-size:12px;
+}
+.button{
+    width:  200px;
+    height: 44px;
+    position:absolute;
+    bottom:12px;
+    left: 50px;
+    background:none;
+    border:none;
+    outline: none;
+}
