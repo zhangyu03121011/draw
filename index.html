@@ -14,24 +14,19 @@
     .all-list-selected{ background: url("images/all-list-selected.png") no-repeat center; background-size: 50%;}
     .my-list{ background: url("images/my-list.png") no-repeat center; background-size: 50%;}
     .my-list-selected{ background: url("images/my-list-selected.png") no-repeat center; background-size: 50%;}
+
+    .no-record{
+        color: #fff;
+    }
     .list{
+        padding-bottom: 15px;
+        margin: 0 15px;
         background: url("images/list-bg.png") no-repeat;
         background-size: cover;
-    }
-    .wheel-top{
-        height: 90px;
-        background: url("images/wheel-top.png") no-repeat center;
-        background-size: contain;
-        margin-bottom: 20px;
-    }
-    .title{
-        width: 100%;
-        height: 30px;
-        background: url("images/rule-title.png") no-repeat center;
-        background-size: contain;
-        position: absolute;
-        top: -15px;
-        left: 0;
+        border-bottom-left-radius: 5px;
+        -webkit-border-bottom-left-radius: 5px;
+        border-bottom-right-radius:5px;
+        -webkit-border-bottom-right-radius:5px;
     }
 
 </style>
@@ -55,10 +50,8 @@
                 <button value="1" class="prizeMy my-list" onclick="nwoClick(this)" ></button>
             </div>
 			<div class="listContain">
-				<div class="listBox">
-					<ul id="ul">
-					</ul>
-				</div>
+				<div class="listBox" id="listBox"></div>
+                <div class="myListBox" id="myListBox" style="display: none"></div>
 			</div>
 		</div>
 	</div>
@@ -67,9 +60,7 @@
 		<!--活动规则-->
 		<div class="rulesContain">
 			<div class="box">
-				<div class="title">
-
-				</div>
+				<div class="title"></div>
 				<ul class="rulesList">
 					<li>1、活动期间，投资每慢2000元即可获得一次转盘抽奖机会，买的越多，抽奖机会越多。</li>
 					<li>2、仅限下单时间在6月18日-8月18日投资订单，以下单时间为准。</li>
@@ -111,7 +102,7 @@
         textRadius:145,				//大转盘奖品位置距离圆心的距离
         insideRadius:68,			//大转盘内圆的半径
         startAngle:0,				//开始角度
-        bRotate:false				//false:停止;ture:旋转
+        bRotate:false				//false:停止;true:旋转
     };
 
     $.ajaxSettings.async = false;
@@ -188,12 +179,12 @@
                             item = data1.data.awardIndex;
                             console.log('中奖产品序号：'+item);
                         }else{
-                           // alert(data1.msg);
+                            alert(data1.msg);
                             boo = true;
                         }
                     });
                     if(boo){
-                        //return false;
+                        return false;
                     }
                     if(turnplate.bRotate)return;
                     turnplate.bRotate = !turnplate.bRotate;
@@ -281,19 +272,7 @@
                 }
 
                 //添加对应图标
-                if(text.indexOf("iphone 6S")>0){
-                  var img = document.getElementById("shan-img");
-                  img.onload=function(){
-                      ctx.drawImage(img,-15,10);
-                  };
-                  ctx.drawImage(img,-15,10);
-                }else if(text.indexOf("谢谢参与")>=0){
-                  var img = document.getElementById("sorry-img");
-                  img.onload=function(){
-                      ctx.drawImage(img,-15,10);
-                  };
-                  ctx.drawImage(img,-15,10);
-                }
+                creatPrizeImage(text, ctx);
                 //把当前画布返回（调整）到上一个save()状态之前
                 ctx.restore();
                 //----绘制奖品结束----
@@ -301,41 +280,91 @@
         }
     }
 
+    // 根据奖品类型，绘制不同的图标。可能出现的奖品需要预先预定
+    function creatPrizeImage(text, ctx){
+        if(text.indexOf("000")>=0){
+            var img = document.getElementById("shan-img");
+            img.onload=function(){
+                ctx.drawImage(img,-15,10);
+            };
+            ctx.drawImage(img,-15,10);
+        }else if(text.indexOf("谢谢参与")>=0){
+            var img = document.getElementById("sorry-img");
+            img.onload=function(){
+                ctx.drawImage(img,-15,10);
+            };
+            ctx.drawImage(img,-15,10);
+        }else if(text.indexOf("100元代金券")>=0){
+            var img = document.getElementById("sorry-img");
+            img.onload=function(){
+                ctx.drawImage(img,-15,10);
+            };
+            ctx.drawImage(img,-15,10);
+        }
+    }
+
+
     //初始化中奖榜单
     var clickUserList = '';
     var jpNum = 0;
-    $.getJSON(jpUrl+activityId,function(data){
+    $.getJSON(jpUrl+"00debd2483aa4f0eb10fcaa54df041be",function(data){
         if(data.status){
             jpNum = data.data.length;
-
-            for(var i=0; i<data.data.length; i++){
-                var newTime = new Date(data.data[i].createDate);
-                clickUserList += '<li class="row"><div class="userImage" '+
-                        'style="background: url('+data.data[i].avatar+') no-repeat center; background-size:80%; -webkit-background-size:80%";></div>'+
-                        '<div class="userInfo"><div class="item item-row" style="display: flex">'+
-                        '<div class="userName"><span style="color:#fab60b">'+(i+1)+'</span></div>'+
-                        '</div><div class="item item-row award">'+data.data[i].awardName+'</div>'+
-                        '<div class="item item-row time">'+formatSysDate(newTime)+'</div></div></li>';
-            };
-            $('#ul').append(clickUserList);
-            $('#ul').append(clickUserList);
+            if(jpNum != 0){
+                // 我的奖品个数不为0
+                for(var i=0; i<jpNum; i++){
+                    var newTime = new Date(data.data[i].createDate);
+                    clickUserList += '<li class="row"><div class="userImage" '+
+                            'style="background: url('+data.data[i].avatar+') no-repeat center; background-size:80%; -webkit-background-size:80%";></div>'+
+                            '<div class="userInfo"><div class="item item-row" style="display: flex">'+
+                            '<div class="userName"><span style="color:#fab60b">'+(i+1)+'</span></div>'+
+                            '</div><div class="item item-row award">'+data.data[i].awardName+'</div>'+
+                            '<div class="item item-row time">'+formatSysDate(newTime)+'</div></div></li>';
+                }
+                clickUserList = '<ul>'+clickUserList+clickUserList+'</ul>';
+                $('#listBox').html(clickUserList);
+            } else {
+                // 暂无获奖记录
+                clickUserList = '<div class="no-record">暂无获奖记录</div>';
+                $('#listBox').html(clickUserList);
+            }
         }
     });
-    //        console.log("初始化中奖榜单数据："+clickUserList);
+
 
     //初始化我的奖品
     var myJpList = '';
+    var myJpNum = 0;
+    var dataStatus = true;
     $.getJSON(getMyJpUrl,function(data){
         if(data.status){
-            for(var i=0; i<data.data.length; i++){
-                var newTime = new Date(data.data[i].createDate);
-                myJpList += '<li class="row">'+
-                        '<div class="userInfo"><div class="item item-row" style="display: flex">'+
-                        '<div class="userName"><span style="color:#fab60b">'+(i+1)+'</span></div>'+
-                        '</div><div class="item item-row award">'+data.data[i].awardName+'</div>'+
-                        '<div class="item item-row time">'+formatSysDate(newTime)+'</div></div>' +
-                        '</li>';
+            myJpNum = data.data.length;
+            if(myJpNum != 0){
+                // 我的奖品个数不为0
+                if(myJpList != ""){
+                    myJpList = "";
+                }
+                for(var i=0; i<myJpNum; i++){
+                    var newTime = new Date(data.data[i].createDate);
+                    myJpList += '<li class="row">'+
+                            '<div class="userInfo"><div class="item item-row" style="display: flex">'+
+                            '<div class="userName"><span style="color:#fab60b">'+(i+1)+'</span></div>'+
+                            '</div><div class="item item-row award">'+data.data[i].awardName+'</div>'+
+                            '<div class="item item-row time">'+formatSysDate(newTime)+'</div></div>' +
+                            '</li>';
+                }
+                myJpList = '<ul>'+myJpList+myJpList+'</ul>';
+                $('#myListBox').html(myJpList);
+            } else {
+                // 暂无获奖记录
+                myJpList = '<div class="no-record">暂无获奖记录</div>';
+                $('#myListBox').html(myJpList);
             }
+        } else {
+            dataStatus = false;
+            // 暂无获奖记录
+            myJpList = '<div class="no-record">无法获取获奖记录</div>';
+            $('#myListBox').html(myJpList);
         }
     });
 
@@ -366,15 +395,13 @@
     function nwoClick(e){
         if($(e).val() == 0){
             $(e).addClass("all-list-selected").siblings().removeClass("my-list-selected");
-            $('#ul').html('');
-            $('#ul').append(clickUserList);
-            $('#ul').append(clickUserList);
+            $('#listBox').show();
+            $('#myListBox').hide();
         }else {
             $(e).addClass("my-list-selected").siblings().removeClass("all-list-selected");
-            $('#ul').html('');
-            $('#ul').append(myJpList);
-            $('#ul').append(myJpList);
-            $('.row').css('padding-left','0px');
+            //$('.row').css('padding-left','0px');
+            $('#listBox').hide();
+            $('#myListBox').show();
         }
     }
 
