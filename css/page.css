@@ -3,24 +3,37 @@ html{
 }
 body{
     overflow-x:hidden;
+    /*background: url("../images/刀刀01.jpg") no-repeat top;*/
     background: url("../images/mainBg.jpg") no-repeat top;
     background-size: cover;
     -webkit-background-size: cover;
 }
-
+/* 中奖榜单 / 我的记录 */
+.prize{
+    display: flex;
+}
+.prize button{
+    flex: 1;
+    margin: 5px;
+    height: 45px;
+    border: 0;
+    font-weight: 800;
+    font-size: 16px;
+    outline: none;
+}
 /* 中奖榜单 */
 .list{
     margin: 0 15px;
-    border-top: 5px solid #4e08a6;
-    border-top-left-radius: 2px;
-    -webkit-border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
-    -webkit-border-top-right-radius: 2px;
+    /*border-top: 5px solid #4e08a6;*/
+    /*border-top-left-radius: 2px;*/
+    /*-webkit-border-top-left-radius: 2px;*/
+    /*border-top-right-radius: 2px;*/
+    /*-webkit-border-top-right-radius: 2px;*/
 }
 .listContain{
     margin: 0 5px;
     padding: 10px 5px;
-    background-color: rgba(83,20,150,0.8);
+    /*background-color: rgba(83,20,150,0.8);*/
     border-bottom-left-radius: 5px;
     -webkit-border-bottom-left-radius: 5px;
     border-bottom-right-radius:5px;
@@ -64,10 +77,10 @@ body{
 	transition:all 0.5s;
 }
 .list ul li:nth-child(even){
-    background-color: rgba(101,44,161,0.8);
+    /*background-color: rgba(101,44,161,0.8);*/
 }
 .list ul li:nth-child(odd){
-    background-color: rgba(92,32,156,0.9);
+    /*background-color: rgba(92,32,156,0.9);*/
 }
 .userImage{
     width: 60px;
@@ -126,8 +139,11 @@ body{
 /* 活动规则 */
 .rulesContain{
     margin: 0 20px;
-    padding: 10px 5px;
-    border: 1px dashed #4c0b89;
+    padding: 15px 5px;
+    /*border: 1px dashed #4c0b89;*/
+    background: url("../images/list-bg.png") no-repeat;
+    background-size: 100% 100%;
+    position: relative;
 }
 .box{ }
 .rulesList li{
@@ -156,7 +172,7 @@ body{
     margin-top:-150px;
 }
 .win{
-    background: url("../images/win.png") no-repeat center;
+    background: url("../images/win1.png") no-repeat center;
     background-size: contain;
     -webkit-background-size: contain;
 }

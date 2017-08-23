@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+    <meta name="description" content="jQuery实现无间隙滚动效果">
+    <title>jQuery demo</title>
+    <style>
+        body { font: 12px/1.5 tahoma, "microsoft yahei", "微软雅黑E\8F6F\96C5\9ED1"; }
+        body, div, ul, li, h1 { margin: 0; padding: 0; }
+        .news { margin: 100px 0 0 100px; }
+        .news ul { list-style: none; }
+        .news-box { padding: 20px; width: 310px; height: 192px; background-color: #fcfcfd; overflow: hidden; position: relative; }
+        .news h1 { margin-bottom: 15px; padding-left: 20px; color: #370188; }
+        .news-list { position: absolute; }
+        .news-list li { width: 100%; height: 24px; line-height: 24px; overflow: hidden; word-wrap: normal; }
+        .news-list li a { text-decoration: none; color: #000; }
+        .news-list li a:hover {
+            -webkit-transition: color .2s linear, background-color .3s linear;
+            -moz-transition: color .2s linear, background-color .3s linear;
+            -ms-transition: color .2s linear, background-color .3s linear;
+            -o-transition: color .2s linear, background-color .3s linear;
+            transition: color .2s linear, background-color .3s linear;
+            color: #FF4400;
+            text-decoration: underline;
+        }
+        .news-list li a:visited { color: #290065; }
+    </style>
+    <script src="js/jquery-1.10.2.js"></script>
+</head>
+<body>
+<div id="J_news" class="news">
+    <h1>文字列表滚动</h1>
+    <div id="J_Roll_Container" class="news-box">
+        <ul class="J_Roll_Content news-list">
+            <li><a href="http://news.ifeng.com/world/detail_2013_01/11/21098447_0.shtml" target="_blank">在澳中国留学生涉嫌接送非法色情业者赚外快被罚</a></li>
+            <li><a href="http://news.qq.com/a/20130111/000993.htm" target="_blank">印度北部等今冬遭遇极寒天气 已致数百人被冻死</a></li>
+            <li><a href="http://news.qq.com/a/20130111/001251.htm" target="_blank">意大利警方禁止挂中国红灯笼 被指危险引燃物</a></li>
+            <li><a href="http://news.sina.com.cn/c/2013-01-10/121926003955.shtml" target="_blank">日方否认将对中国巡航钓鱼岛飞机</a></li>
+            <li><a href="http://news.hf365.com/system/2013/01/10/012875943.shtml" target="_blank">日本防卫省否认将对中国飞机警告射击(图)</a></li>
+            <li><a href="http://news.21cn.com/world/guojisaomiao/2013/01/10/14338977.shtml" target="_blank">日否认警告射击中海监飞机 恐中日因夺岛开战</a></li>
+            <li><a href="http://military.people.com.cn/n/2013/0110/c1011-20150261.html" target="_blank">传解放军举行长白山军演</a></li>
+            <li><a href="http://news.21cn.com/world/guojisaomiao/2013/01/10/14335623.shtml" target="_blank">中国高新6号反潜机问世 反潜艇性能优于美军P-3C</a></li>
+            <li><a href="http://opinion.huanqiu.com/opinion_world/2013-01/3467875.html" target="_blank">张建刚：2030年中国将圆海洋强国梦</a></li>
+            <li><a href="http://news.hf365.com/system/2013/01/10/012873928.shtml" target="_blank">运-20现身试飞中心 可取代伊尔-76任何功能</a></li>
+            <li><a href="http://mil.sohu.com/20130110/n362988784.shtml" target="_blank">东海舰队引入大批无人机 饱和攻击让日难以招架</a></li>
+        </ul>
+    </div>
+</div>
+<script>
+    jQuery.extend({
+        roll: function(contentCls, contentParentId, configs){
+            var setTimeID, totalWidth = 0, totalHeight = 0,
+                    firstContent, secondContent, contents;
+            (function(){
+                var singleContent, cloneContent, nodeList;
+                singleContent = $(contentCls, contentParentId);
+                nodeList = singleContent.children();
+                if (configs.effect === 'scrollX') {
+                    $.each(nodeList, function(idx, itm) {
+                        totalWidth += $(itm).outerWidth(true);
+                    });
+                    singleContent.css({ 'width': totalWidth + 'px' });
+                }
+                else if (configs.effect === 'scrollY') {
+                    $.each(nodeList, function(idx, itm) {
+                        totalHeight += $(itm).outerHeight(true);
+                    });
+                    singleContent.css({ 'height': totalHeight + 'px' });
+                }
+                cloneContent = singleContent.clone();
+                cloneContent.appendTo(contentParentId);
+                contents = $(contentCls, contentParentId);
+                firstContent = contents[0];
+                secondContent = contents[1];
+                if (configs.effect === 'scrollX') {
+                    $(firstContent).css({ 'left': 0 });
+                    $(secondContent).css({ 'left': totalWidth + 'px' });
+                }
+                else if (configs.effect === 'scrollY') {
+                    $(firstContent).css({ 'top': 0 });
+                    $(secondContent).css({ 'top': totalHeight + 'px' });
+                }
+            })()
+            function cssAnimate(){
+                if (configs.effect === 'scrollX') {
+                    $(firstContent).css({ left: parseInt(firstContent.style.left, 10) - 1 + 'px' });
+                    $(secondContent).css({ left: parseInt(secondContent.style.left, 10) - 1 + 'px' });
+                    $.each(contents, function(idx, itm) {
+                        if (parseInt(itm.style.left,10) === -totalWidth) {
+                            $(itm).css({ left: totalWidth + 'px' });
+                        }
+                    });
+                }
+                else if (configs.effect === 'scrollY') {
+                    $(firstContent).css({ top: parseInt(firstContent.style.top, 10) - 1 + 'px' });
+                    $(secondContent).css({ top: parseInt(secondContent.style.top, 10) - 1 + 'px' });
+                    $.each(contents, function(idx, itm) {
+                        if (parseInt(itm.style.top,10) === -totalHeight) {
+                            $(itm).css({ top: totalHeight + 'px' });
+                        }
+                    });
+                }
+                setTimeId = setTimeout(cssAnimate, configs.duration);
+            }
+            function rollRun(){
+                setTimeId = setTimeout(cssAnimate, configs.delay);
+                return jQuery;
+            }
+            function rollStop(){
+                clearTimeout(setTimeId);
+                return jQuery;
+            }
+            return $.extend({
+                rollRun: rollRun,
+                rollStop: rollStop
+            });
+        }
+    });
+</script>
+<script>
+    $(function(){
+        var roll_jQuery, contents;
+        roll_jQuery = $.roll('.J_Roll_Content', '#J_Roll_Container', { effect: 'scrollY', duration: 40, delay: 500 }).rollRun();
+        contents = $('.J_Roll_Content');
+        contents.bind('mouseenter', function(){
+            roll_jQuery.rollStop();
+        });
+        contents.bind('mouseleave', function(){
+            roll_jQuery.rollRun();
+        });
+    });
+</script>
+</body>
+</html> 
