@@ -34,6 +34,8 @@
 <body>
     <img src="images/1.png" id="shan-img" style="display:none;" />
     <img src="images/2.png" id="sorry-img" style="display:none;" />
+    <img src="images/gold.png" id="gold-img" style="display:none;" />
+
 	<div class="banner">
         <div class="wheel-top"></div>
 		<div class="turnplate" style="background-image:url(images/turnplate-bg.png);background-size:100% 100%; -webkit-background-size:100% 100%;">
@@ -42,7 +44,7 @@
 		</div>
 	</div>
 
-	<div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';">
+	<div style="display: none" class="listView">
 
 		<div class="list">
             <div class="prize">
@@ -190,10 +192,9 @@
                     turnplate.bRotate = !turnplate.bRotate;
                     //获取随机数(奖品个数范围内)
                     //var item = rnd(1,turnplate.restaraunts.length);
-//                        var item =1;
+                    //var item =1;
                     //奖品数量等于10,指针落在对应奖品区域的中心角度[252, 216, 180, 144, 108, 72, 36, 360, 324, 288]
-
-//                        rotateFn(item, turnplate.restaraunts[item-1]);
+                    //rotateFn(item, turnplate.restaraunts[item-1]);
                     rotateFn(item, jp);
                     console.log("哈哈："+item+"---"+turnplate.restaraunts[item-1]);
                 });
@@ -286,24 +287,24 @@
 
     // 根据奖品类型，绘制不同的图标。可能出现的奖品需要预先预定
     function creatPrizeImage(text, ctx){
-        if(text.indexOf("000")>=0){
-            var img = document.getElementById("shan-img");
+        if(text.indexOf("100元代金券")>=0){
+            var img = document.getElementById("gold-img");
             img.onload=function(){
                 ctx.drawImage(img,-15,10);
             };
-            ctx.drawImage(img,-15,10);
+            ctx.drawImage(img,-15,15);
         }else if(text.indexOf("谢谢参与")>=0){
             var img = document.getElementById("sorry-img");
             img.onload=function(){
                 ctx.drawImage(img,-15,10);
             };
-            ctx.drawImage(img,-15,10);
-        }else if(text.indexOf("100元代金券")>=0){
+            ctx.drawImage(img,-15,15);
+        }else if(text.indexOf("0000")>=0){
             var img = document.getElementById("shan-img");
             img.onload=function(){
                 ctx.drawImage(img,-15,10);
             };
-            ctx.drawImage(img,-15,10);
+            ctx.drawImage(img,-15,15);
         }
     }
 
@@ -333,9 +334,13 @@
                 $('#listBox').html(clickUserList);
             } else {
                 // 暂无获奖记录
-                clickUserList = '<div class="no-record">暂无获奖记录</div>';
+                clickUserList = '<div class="no-record">暂无中奖记录</div>';
                 $('#listBox').html(clickUserList);
             }
+        } else {
+            // 无法获取获奖记录
+            clickUserList = '<div class="no-record">无法获取中奖记录</div>';
+            $('#listBox').html(clickUserList);
         }
     });
 
@@ -343,7 +348,6 @@
     //初始化我的奖品
     var myJpList = '';
     var myJpNum = 0;
-    var dataStatus = true;
     $.getJSON(getMyJpUrl,function(data){
         if(data.status){
             myJpNum = data.data.length;
@@ -365,13 +369,12 @@
                 $('#myListBox').html(myJpList);
             } else {
                 // 暂无获奖记录
-                myJpList = '<div class="no-record">暂无获奖记录</div>';
+                myJpList = '<div class="no-record">暂无中奖记录</div>';
                 $('#myListBox').html(myJpList);
             }
         } else {
-            dataStatus = false;
-            // 暂无获奖记录
-            myJpList = '<div class="no-record">无法获取获奖记录</div>';
+            // 无法获取获奖记录
+            myJpList = '<div class="no-record">无法获取中奖记录</div>';
             $('#myListBox').html(myJpList);
         }
     });
@@ -428,27 +431,8 @@
     //清除之前写入的动画样式
     tt.deleteRule(6);
     //动态计算容器高度和动画过渡时间（注：需要传入参数，值为中奖用户个数）
-
     var height = getAnimationHeight(jpNum);
-
-    var newJpNum = 15;
-
-    var duration = getAnimationTime(newJpNum);
-
-//    $('.listBox').click(function(){
-//        if(newJpNum == 15){
-//            newJpNum = 0;
-//            duration = getAnimationTime(newJpNum);
-//            $(".list ul").css("animation-duration",duration);
-//        }else {
-//            newJpNum = 15;
-//            duration = getAnimationTime(newJpNum);
-//            $(".list ul").css("animation-duration",duration);
-//        }
-//    });
-
-
-
+    var duration = getAnimationTime(jpNum);
     //写入样式
     tt.insertRule("@keyframes move{0%{top:0} 100%{top:"+height+"}}");
     //修改动画时间
