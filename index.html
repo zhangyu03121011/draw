@@ -280,6 +280,10 @@
         }
     }
 
+    /**
+     * TODO: -根据奖品类型，绘制不同的图标。可能出现的奖品需要预先预定
+     * */
+
     // 根据奖品类型，绘制不同的图标。可能出现的奖品需要预先预定
     function creatPrizeImage(text, ctx){
         if(text.indexOf("000")>=0){
@@ -295,7 +299,7 @@
             };
             ctx.drawImage(img,-15,10);
         }else if(text.indexOf("100元代金券")>=0){
-            var img = document.getElementById("sorry-img");
+            var img = document.getElementById("shan-img");
             img.onload=function(){
                 ctx.drawImage(img,-15,10);
             };
@@ -303,11 +307,15 @@
         }
     }
 
+    /**
+     * TODO: -初始化中奖榜单（缺失用户名）
+     * */
 
     //初始化中奖榜单
     var clickUserList = '';
     var jpNum = 0;
-    $.getJSON(jpUrl+"00debd2483aa4f0eb10fcaa54df041be",function(data){
+    //var activityId = "00debd2483aa4f0eb10fcaa54df041be";
+    $.getJSON(jpUrl+activityId,function(data){
         if(data.status){
             jpNum = data.data.length;
             if(jpNum != 0){
@@ -317,7 +325,7 @@
                     clickUserList += '<li class="row"><div class="userImage" '+
                             'style="background: url('+data.data[i].avatar+') no-repeat center; background-size:80%; -webkit-background-size:80%";></div>'+
                             '<div class="userInfo"><div class="item item-row" style="display: flex">'+
-                            '<div class="userName"><span style="color:#fab60b">'+(i+1)+'</span></div>'+
+                            '<div class="userName"><span style="color:#fab60b">恭喜 xx 中了</span></div>'+
                             '</div><div class="item item-row award">'+data.data[i].awardName+'</div>'+
                             '<div class="item item-row time">'+formatSysDate(newTime)+'</div></div></li>';
                 }
