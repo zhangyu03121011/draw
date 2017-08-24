@@ -168,7 +168,8 @@
                         }
                     });
                 };
-//                    var isStarted = false;
+
+                /****  点击开始抽奖   ****/
                 $('.pointer').click(function (){
                     var item = '';
                     var boo = false;
@@ -212,7 +213,10 @@
 
     //页面所有元素加载完毕后执行drawRouletteWheel()方法对转盘进行渲染
     window.onload=function(){
+        // 绘制ui
         drawRouletteWheel();
+        // 设置ui界面
+        setupUI();
     };
     //初始化转盘
     function drawRouletteWheel() {
@@ -287,7 +291,25 @@
 
     // 根据奖品类型，绘制不同的图标。可能出现的奖品需要预先预定
     function creatPrizeImage(text, ctx){
-        if(text.indexOf("100元代金券")>=0){
+        if(text.indexOf("10元代金券")>=0){
+            var img = document.getElementById("gold-img");
+            img.onload=function(){
+                ctx.drawImage(img,-15,10);
+            };
+            ctx.drawImage(img,-15,15);
+        }else if(text.indexOf("50元代金券")>=0){
+            var img = document.getElementById("gold-img");
+            img.onload=function(){
+                ctx.drawImage(img,-15,10);
+            };
+            ctx.drawImage(img,-15,15);
+        }else if(text.indexOf("100元代金券")>=0){
+            var img = document.getElementById("gold-img");
+            img.onload=function(){
+                ctx.drawImage(img,-15,10);
+            };
+            ctx.drawImage(img,-15,15);
+        } else if(text.indexOf("200元代金券")>=0){
             var img = document.getElementById("gold-img");
             img.onload=function(){
                 ctx.drawImage(img,-15,10);
@@ -315,7 +337,7 @@
     //初始化中奖榜单
     var clickUserList = '';
     var jpNum = 0;
-    //var activityId = "00debd2483aa4f0eb10fcaa54df041be";
+    //activityId = "00debd2483aa4f0eb10fcaa54df041be";
     $.getJSON(jpUrl+activityId,function(data){
         if(data.status){
             jpNum = data.data.length;
@@ -330,7 +352,13 @@
                             '</div><div class="item item-row award">'+data.data[i].awardName+'</div>'+
                             '<div class="item item-row time">'+formatSysDate(newTime)+'</div></div></li>';
                 }
-                clickUserList = '<ul>'+clickUserList+clickUserList+'</ul>';
+                /***  中奖人数 > 1  ***/
+                if(jpNum > 1){
+                    clickUserList = '<ul>'+clickUserList+clickUserList+'</ul>';
+                }else{
+                    /***  0 < 中奖人数 < 2  ***/
+                    clickUserList = '<ul>'+clickUserList+'</ul>';
+                }
                 $('#listBox').html(clickUserList);
             } else {
                 // 暂无获奖记录
@@ -365,7 +393,13 @@
                             '<div class="item item-row time">'+formatSysDate(newTime)+'</div></div>' +
                             '</li>';
                 }
-                myJpList = '<ul>'+myJpList+myJpList+'</ul>';
+                /***  中奖奖品数 > 1  ***/
+                if(myJpNum > 1){
+                    myJpList = '<ul>'+myJpList+myJpList+'</ul>';
+                }else{
+                    /***  0 < 中奖奖品数 < 2  ***/
+                    myJpList = '<ul>'+myJpList+'</ul>';
+                }
                 $('#myListBox').html(myJpList);
             } else {
                 // 暂无获奖记录
@@ -388,7 +422,7 @@
         }
         //隐藏alerview
         var ele = document.getElementById("alertView");
-        ele.style.display="none";
+        ele.style.display = "none";
         //允许背景滚动
         setScrollview(true);
     }
@@ -426,17 +460,26 @@
         return "-"+height+"px";
     }
 
-    //页面两个样式表，1代表page.css
-    var tt=document.styleSheets[1];
-    //清除之前写入的动画样式
-    tt.deleteRule(6);
-    //动态计算容器高度和动画过渡时间（注：需要传入参数，值为中奖用户个数）
-    var height = getAnimationHeight(jpNum);
-    var duration = getAnimationTime(jpNum);
-    //写入样式
-    tt.insertRule("@keyframes move{0%{top:0} 100%{top:"+height+"}}");
-    //修改动画时间
-    $(".list ul").css("animation-duration",duration)
+    // 设置ui界面，计算高度、时间等
+    function setupUI(){
+        //页面两个样式表，1代表page.css
+        var tt=document.styleSheets[1];
+        //清除之前写入的动画样式
+        tt.deleteRule(6);
+        //动态计算容器高度和动画过渡时间（注：需要传入参数，值为中奖用户个数）
+        var height = getAnimationHeight(jpNum);
+        var duration = getAnimationTime(jpNum);
+        if(jpNum > 1){
+            //写入样式
+            tt.insertRule("@keyframes move{0%{top:0} 100%{top:"+height+"}}");
+            //修改动画时间
+            $(".list ul").css("animation-duration",duration)
+        }else{
+            //写入样式(中奖人数小于2人，不滚动)
+            tt.insertRule("@keyframes move{0%{top:0} 100%{top:0}}");
+        }
+    }
+
 
 </script>
 </html>
